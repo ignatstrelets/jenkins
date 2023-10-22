@@ -30,8 +30,6 @@ pipeline {
 			sh './scripts/test.sh'
 		    }
 		}
-                echo 'Testing...'
-                sh 'npm test'
             }
         }
     }
