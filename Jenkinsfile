@@ -7,9 +7,15 @@ pipeline {
             args '-u root'
         }
     }
+
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
+
+    parameters {
+        booleanParam(name: "TEST", defaultValue: false)
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -19,6 +25,11 @@ pipeline {
         }
         stage('Test') {
             steps {
+		script {
+		    if (params.TEST) {
+			sh './scripts/test.sh'
+		    }
+		}
                 echo 'Testing...'
                 sh 'npm test'
             }
