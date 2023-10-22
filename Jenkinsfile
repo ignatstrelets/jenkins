@@ -1,7 +1,9 @@
 #!/usr/bin/env groovy
 
 pipeline {
-
+	options {
+      		timeout(time: 20, unit: 'SECONDS') 
+  	}
     agent {
         docker {
             image 'node'
