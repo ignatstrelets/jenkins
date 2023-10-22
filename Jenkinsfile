@@ -1,16 +1,15 @@
 #!/usr/bin/env groovy
 
 pipeline {
-	options {
-      		timeout(time: 20, unit: 'SECONDS') 
-  	}
     agent {
         docker {
             image 'node'
             args '-u root'
         }
     }
-
+    options {
+            timeout(time: 20, unit: 'SECONDS')
+    }
     stages {
         stage('Build') {
             steps {
