@@ -13,12 +13,11 @@ Server.route({
     path: '/hello/{user}',
     handler: function (request, reply) {
 
-        const result = Hello(decodeURIComponent(request.params.user));
-        return result;
+        const resulting_response = Hello(decodeURIComponent(request.params.user));
+        return resulting_response;
     }
 });
 
-// don't start server if this file was required
 
 if (!module.parent) {
 
