@@ -13,8 +13,8 @@ Server.route({
     path: '/hello/{user}',
     handler: function (request, reply) {
 
-        const resulting_response = Hello(decodeURIComponent(request.params.user));
-        return resulting_response;
+        const result = Hello(decodeURIComponent(request.params.user));
+        return result;
     }
 });
 
