@@ -8,7 +8,9 @@ pipeline {
             args '-u root'
         }
     }
-
+    options {
+            timeout(time: 20, unit: 'SECONDS')
+    }
     stages {
         stage('Build') {
             steps {
