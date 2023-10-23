@@ -27,7 +27,7 @@ pipeline {
             steps {
 		script {
 		    if (params.TEST) {
-			sh 'sudo scripts/test.sh'
+			sh 'scripts/test.sh'
 		    }
 		}
             }
