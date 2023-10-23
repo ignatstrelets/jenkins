@@ -15,7 +15,7 @@ pipeline {
     agent {
         docker {
             image 'node'
-            args '-p $APP_PORT:$APP_PORT -u root '
+            args "-p ${env.$APP_PORT}:${env.APP_PORT} -u root "
         }
     }
     options {
@@ -27,7 +27,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh 'npm install'
-	        echo "running on ${env.APP_PORT} with CI ${env.CI}"
+	        echo "Docker container running on ${env.APP_PORT} with CI ${env.CI}"
             }
         }
         stage('Test') {
