@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo 'Testing...'
 npm test
