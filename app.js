@@ -4,7 +4,7 @@ const Hapi   = require('@hapi/hapi');
 
 const app_port = process.env.APP_PORT || 8000;
 
-console.log(app_port);
+console.log("Listening on port: " + app_port);
 
 const Server = new Hapi.Server({
     host: 'localhost',
