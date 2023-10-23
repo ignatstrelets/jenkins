@@ -15,7 +15,7 @@ pipeline {
     agent {
         docker {
             image 'node'
-            args "-p ${env.$APP_PORT}:${env.APP_PORT} -u root "
+            args "-p ${env.APP_PORT}:${env.APP_PORT} -u root "
         }
     }
     options {
