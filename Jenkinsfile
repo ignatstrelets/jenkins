@@ -8,7 +8,7 @@ pipeline {
     }
     
     environment {
-	APP_PORT = ${params.APP_PORT}
+	APP_PORT = "${params.APP_PORT}"
         CI = 'true'
     }
 
