@@ -30,7 +30,7 @@ pipeline {
             steps {
 		script {
 		    if (params.TEST) {
-			sh 'APP_PORT=${params.APP_PORT} npm test'
+			sh "APP_PORT=${params.APP_PORT} npm test"
 		    }
 		}
             }
