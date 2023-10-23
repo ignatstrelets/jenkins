@@ -2,9 +2,13 @@
 
 const Hapi   = require('@hapi/hapi');
 
+const app_port = process.env.APP_PORT || 8000;
+
+console.log(app_port);
+
 const Server = new Hapi.Server({
     host: 'localhost',
-    port: 8000
+    port: app_port
 });
 const Hello  = require('./lib/hello');
 
