@@ -9,6 +9,7 @@ pipeline {
     
     environment {
 	APP_PORT = ${params.APP_PORT}
+        CI = 'true'
     }
 
     agent {
@@ -16,9 +17,6 @@ pipeline {
             image 'node'
             args '-u root -p $APP_PORT:$APP_PORT'
         }
-    }
-    environment {
-        CI = 'true'
     }
     options {
             timeout(time: 20, unit: 'SECONDS')
