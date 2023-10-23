@@ -7,7 +7,9 @@ pipeline {
             args '-u root'
         }
     }
-
+    environment {
+        CI = 'true'
+    }
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
@@ -27,7 +29,7 @@ pipeline {
             steps {
 		script {
 		    if (params.TEST) {
-			sh 'scripts/test.sh'
+			sh 'npm test'
 		    }
 		}
             }
