@@ -1,6 +1,12 @@
 #!/usr/bin/env groovy
 
 pipeline {
+
+    parameters {
+    booleanParam(name: "TEST", defaultValue: false)
+    string(name: "APP_PORT", defaultValue: '8000')
+    }
+
     agent {
         docker {
             image 'node'
@@ -12,11 +18,6 @@ pipeline {
     }
     options {
             timeout(time: 20, unit: 'SECONDS')
-    }
-
-    parameters {
-        booleanParam(name: "TEST", defaultValue: false)
-	string(name: "APP_PORT", defaultValue: '8000')
     }
 
     stages {
