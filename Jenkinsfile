@@ -27,6 +27,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh 'npm install'
+	        echo 'running on ${env.APP_PORT}'
             }
         }
         stage('Test') {
