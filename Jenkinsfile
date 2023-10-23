@@ -6,11 +6,15 @@ pipeline {
     booleanParam(name: "TEST", defaultValue: false)
     string(name: "APP_PORT", defaultValue: '8000')
     }
+    
+    environment {
+	APP_PORT = ${params.APP_PORT}
+    }
 
     agent {
         docker {
             image 'node'
-            args '-u root -p ${params.APP_PORT}:${params.APP_PORT}'
+            args '-u root -p $APP_PORT:$APP_PORT'
         }
     }
     environment {
