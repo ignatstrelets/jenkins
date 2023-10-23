@@ -16,6 +16,7 @@ pipeline {
 
     parameters {
         booleanParam(name: "TEST", defaultValue: false)
+	string(name: "APP_PORT", defaultValue: '8000')
     }
 
     stages {
@@ -29,7 +30,7 @@ pipeline {
             steps {
 		script {
 		    if (params.TEST) {
-			sh 'npm test'
+			sh 'APP_PORT=${params.APP_PORT} npm test'
 		    }
 		}
             }
