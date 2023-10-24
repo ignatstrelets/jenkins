@@ -51,8 +51,7 @@ pipeline {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \
 		echo 'Starting to deploy docker image..' &&
-		CURRENT_IMAGE=${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
-		docker pull $CURRENT_IMAGE &&
+		docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
 		docker run -d -p ${params.APP_PORT}:${params.APP_PORT} $CURRENT_IMAGE -v &&
 		sudo docker ps" """
