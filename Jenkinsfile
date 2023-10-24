@@ -48,15 +48,11 @@ pipeline {
         }
 	stage('Deploy') {
 	    steps {
-		sh '''
-		echo "DOCKER_REPO=${params.DOCKER_REPO}" > sshenv
-		echo "DOCKER_IMAGE=${params.DOCKER_IMAGE}" >> sshenv
-		echo "APP_PORT=${params.APP_PORT}" >> sshenv
-		sudo scp sshenv ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/.ssh/environment
-		sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/
-		sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} "cat /home/ubuntu/.ssh/environment /
-		&&  chmod +x deploy.sh && sudo bash ./deploy.sh && docker ps"
-		'''
+		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
+		sh "sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} APP_PORT=${params.APP_PORT} \
+		DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} <<ENDSSH
+		chmod +x deploy.sh && sudo bash ./deploy.sh && docker ps"
+		ENDSSH"
 	    }
 	}
     }
