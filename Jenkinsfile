@@ -43,6 +43,7 @@ pipeline {
         }
 	stage('Deploy') {
 	    steps {
+		sh "whoami"
 		sh "scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'chmod +x deploy.sh'"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'DOCKER_IMAGE=${params.DOCKER_IMAGE}'"
