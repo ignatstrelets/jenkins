@@ -56,8 +56,7 @@ pipeline {
 		echo 'Starting to deploy docker image..' &&
 		sudo docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		sudo docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
-		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} \ 
-		${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v &&
+		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v &&
 		sudo docker exec ${params.CONTAINER_NAME} npm start"
 		sudo docker ps" """
 	    }
