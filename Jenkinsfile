@@ -31,7 +31,7 @@ pipeline {
             steps {
 		echo 'Backup. Pushing Docker Image...'
 	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	sh 'docker login -u $env.dockerHubUser -p $env.dockerHubPassword'
+        	sh "docker login -u $env.dockerHubUser -p $env.dockerHubPassword"
         	sh "docker push ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 		}
 	    }
