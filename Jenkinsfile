@@ -43,8 +43,8 @@ pipeline {
 		    if (params.TEST) {
 			sh "docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 			sh """docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} \
-			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v"""
-			sh "docker exec ${params.CONTAINER_NAME} npm test && docker rm ${params.CONTAINER_NAME}"
+			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v &&
+			docker exec ${params.CONTAINER_NAME} npm test && docker rm ${params.CONTAINER_NAME}"""
 		    }
 		}
             }
