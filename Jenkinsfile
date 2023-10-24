@@ -40,7 +40,7 @@ pipeline {
             steps {
 		script {
 		    if (params.TEST) {
-			sh "docker run -d --name ${params.CONTAINER_NAME} -p ${params.APP_PORT}:${params.APP_PORT} -u root -v"
+			sh "docker run -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v"
 			sh "docker exec ${params.CONTAINER_NAME} npm test"
 		    }
 		}
