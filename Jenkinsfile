@@ -14,7 +14,6 @@ pipeline {
         CI = 'true'
     }
     agent none
-    	    }
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
