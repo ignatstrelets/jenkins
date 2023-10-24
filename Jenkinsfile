@@ -13,7 +13,12 @@ pipeline {
     environment {
         CI = 'true'
     }
-    agent none
+    agent {
+	docker {
+	    label 'docker'
+	    image 'node'
+	    args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
+	}
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
@@ -21,10 +26,7 @@ pipeline {
     stages {
         stage('Build') {
 		agent {
-			docker {
-                	    image 'node'
-        	            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
-	                }
+		    label 'docker'
 		}
                 echo 'Building...'
                 sh 'npm install'
@@ -32,10 +34,7 @@ pipeline {
             }
         stage('Test') {
 	    agent {
-                        docker {
-                            image 'node'
-                            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
-                        }
+                    label 'docker'
 	    }
             steps {
 		script {
