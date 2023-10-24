@@ -48,10 +48,13 @@ pipeline {
         }
 	stage('Deploy') {
 	    steps {
-		sh "whoami"
+		sh "echo 'DOCKER_REPO=${params.DOCKER_REPO}' > sshenv"
+		sh "echo 'DOCKER_IMAGE=${params.DOCKER_IMAGE}' >> sshenv"
+		sh "echo 'APP_PORT=${params.APP_PORT}' >> sshenv"
+		sh "scp sshenv ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/.ssh/environment"
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'chmod +x deploy.sh'"
-		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} APP_PORT=${params.APP_PORT} && sudo bash -s < ./deploy.sh'"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'sudo bash -s < ./deploy.sh'"
 	    }
 	}
     }
