@@ -21,7 +21,6 @@ pipeline {
     stages {
         stage('Build') {
 		agent {
-			label 'docker'
 			docker {
                 	    image 'node'
         	            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
@@ -33,7 +32,10 @@ pipeline {
             }
         stage('Test') {
 	    agent {
-		    label 'docker'
+                        docker {
+                            image 'node'
+                            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
+                        }
 	    }
             steps {
 		script {
