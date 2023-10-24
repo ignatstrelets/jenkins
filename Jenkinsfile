@@ -43,8 +43,8 @@ pipeline {
 		    if (params.TEST) {
 			sh "docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 			sh """docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} \
-			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v &&
-			docker exec ${params.CONTAINER_NAME} npm test && docker rm ${params.CONTAINER_NAME}"""
+			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v /bin/bash -c 'npm test' &&
+			docker rm ${params.CONTAINER_NAME}"""
 		    }
 		}
             }
@@ -56,8 +56,7 @@ pipeline {
 		echo 'Starting to deploy docker image..' &&
 		sudo docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		sudo docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
-		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v &&
-		sudo docker exec ${params.CONTAINER_NAME} npm start
+		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v /bin/bash -c 'npm start'
 		sudo docker ps && sudo docker rm ${params.CONTAINER_NAME}" """
 	    }
 	}
