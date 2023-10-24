@@ -49,10 +49,10 @@ pipeline {
 	stage('Deploy') {
 	    steps {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
-		sh ''' sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} APP_PORT=${params.APP_PORT} \
+		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} APP_PORT=${params.APP_PORT} \
 		DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} <<ENDSSH
 		chmod +x deploy.sh && sudo bash ./deploy.sh && docker ps"
-		ENDSSH '''
+		ENDSSH """
 	    }
 	}
     }
