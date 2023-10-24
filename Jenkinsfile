@@ -25,7 +25,8 @@ pipeline {
 	    steps {
 		cleanWs()
                 echo 'Building...'
-                sh "docker build --no-cache --build-arg='APP_PORT=${params.APP_PORT}'  -t ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest ."
+                sh "docker build --no-cache --build-arg='APP_PORT=${params.APP_PORT}'  -t ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest \
+		./Dockerfile "
 	        echo "Docker image. Port to expose: ${params.APP_PORT} ; CI: ${env.CI}"
             }
 	}
