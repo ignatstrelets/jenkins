@@ -5,17 +5,19 @@ pipeline {
     parameters {
     booleanParam(name: "TEST", defaultValue: false)
     string(name: "APP_PORT", defaultValue: '8000')
+    string(name: "REMOTE_USER", defaultValue: 'ubuntu')
+    string(name: "REMOTE_HOST", defaultValue: 'ip-172-31-27-214')
+    string(name: "DOCKER_IMAGE", defaultValue: '')
     }
     
     environment {
-	APP_PORT = "${params.APP_PORT}"
         CI = 'true'
     }
 
     agent {
         docker {
             image 'node'
-            args "-p ${env.APP_PORT}:${env.APP_PORT} -u root "
+            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
         }
     }
     options {
@@ -27,7 +29,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh 'npm install'
-	        echo "Docker container running on ${env.APP_PORT} with CI ${env.CI}"
+	        echo "Docker container running on ${params.APP_PORT} with CI ${env.CI}"
             }
         }
         stage('Test') {
@@ -39,5 +41,13 @@ pipeline {
 		}
             }
         }
+	stage('Deploy') {
+	    steps {
+		sh "scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'chmod +x deploy.sh'"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'DOCKER_IMAGE=${params.DOCKER_IMAGE}'"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'bash -s < ./deploy.sh'"
+	    }
+	}
     }
 }
