@@ -51,8 +51,8 @@ pipeline {
 		sh "whoami"
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'chmod +x deploy.sh'"
-		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'DOCKER_IMAGE=${params.DOCKER_IMAGE}'"
-		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'bash -s < ./deploy.sh'"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} APP_PORT=${params.APP_PORT}'"
+		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'sudo bash -s < ./deploy.sh'"
 	    }
 	}
     }
