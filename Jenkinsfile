@@ -13,35 +13,40 @@ pipeline {
     environment {
         CI = 'true'
     }
-
-    agent {
-        docker {
-            image 'node'
-            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
-        }
-    }
+    agent none
+    	    }
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
 
     stages {
         stage('Build') {
-            steps {
+		agent {
+			label 'docker'
+			docker {
+                	    image 'node'
+        	            args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
+	                }
+		}
                 echo 'Building...'
                 sh 'npm install'
 	        echo "Docker container running on ${params.APP_PORT} with CI ${env.CI}"
             }
-        }
         stage('Test') {
+	    agent {
+		    label 'docker'
+	    }
             steps {
 		script {
 		    if (params.TEST) {
+			sh "docker ps -a"
 			sh "APP_PORT=${params.APP_PORT} npm test"
 		    }
 		}
             }
         }
 	stage('Deploy') {
+            agent any
 	    steps {
 		sh "whoami"
 		sh "scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/"
