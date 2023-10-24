@@ -53,7 +53,7 @@ pipeline {
 		echo 'Starting to deploy docker image..' &&
 		docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
-		docker run -d -p ${params.APP_PORT}:${params.APP_PORT} $CURRENT_IMAGE -v &&
+		docker run -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v &&
 		sudo docker ps" """
 	    }
 	}
