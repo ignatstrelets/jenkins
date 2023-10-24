@@ -9,6 +9,7 @@ pipeline {
     string(name: "REMOTE_HOST", defaultValue: 'ip-172-31-27-214')
     string(name: "DOCKER_REPO", defaultValue: 'ignatstrelets')
     string(name: "DOCKER_IMAGE", defaultValue: 'hello_hapi')
+    string(name: "CONTAINER_NAME", defaultValue: 'hello_hapi')
     }
     
     environment {
@@ -41,7 +42,8 @@ pipeline {
 		script {
 		    if (params.TEST) {
 			sh "docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
-			sh "docker run -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v"
+			sh """docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} \
+			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v"""
 			sh "docker exec ${params.CONTAINER_NAME} npm test"
 		    }
 		}
