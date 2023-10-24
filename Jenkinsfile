@@ -20,7 +20,6 @@ pipeline {
             timeout(time: 5, unit: 'MINUTES')
     }
 
->>>>>>> staging
     stages {
         stage('Build') {
 	    steps {
@@ -51,6 +50,9 @@ pipeline {
             }
         }
 	stage('Deploy') {
+	    when {
+                branch 'PR-*'  
+            }
 	    steps {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \
