@@ -16,12 +16,14 @@ pipeline {
     }
     agent any
     options {
-            timeout(time: 180, unit: 'SECONDS')
+	    skipDefaultCheckout(true)
+            timeout(time: 5, unit: 'MINUTES')
     }
 
     stages {
         stage('Build') {
 	    steps {
+		cleanWs()
                 echo 'Building...'
                 sh "docker build --build-arg='APP_PORT=${params.APP_PORT}'  -t ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest ."
 	        echo "Docker image. Port to expose: ${params.APP_PORT} ; CI: ${env.CI}"
@@ -31,7 +33,7 @@ pipeline {
             steps {
 		echo 'Backup. Pushing Docker Image...'
 	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-        	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+        	sh 'docker login -u $env.dockerHubUser -p $env.dockerHubPassword'
         	sh "docker push ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 		}
 	    }
@@ -58,5 +60,15 @@ pipeline {
 		sudo docker ps" """
 	    }
 	}
+    }
+    post {
+        always {
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+        }
     }
 }
