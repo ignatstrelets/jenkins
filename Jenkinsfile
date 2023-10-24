@@ -21,16 +21,20 @@ pipeline {
 
     stages {
         stage('Build') {
+	    steps {
                 echo 'Building...'
                 sh "docker build --build-arg='APP_PORT=${params.APP_PORT}'  -tag ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest ."
 	        echo "Docker image. Port to expose: ${params.APP_PORT} ; CI: ${env.CI}"
-        }
+            }
+	}
 	stage('Backup') {
+            steps {
 		echo 'Backup. Pushing Docker Image...'
 	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
         	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
         	sh "docker push ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 		}
+	    }
 	}		
         stage('Test') {
             steps {
