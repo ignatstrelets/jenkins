@@ -60,7 +60,8 @@ pipeline {
 		sudo docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		sudo docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
 		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v /bin/bash -c 'npm start'
-		sudo docker ps && sudo docker stop && sudo docker rm ${params.CONTAINER_NAME}" """
+		sudo docker ps && sudo docker stop ${params.CONTAINER_NAME} && sudo docker rm ${params.CONTAINER_NAME}" """
+		
 	    }
 	}
     }
