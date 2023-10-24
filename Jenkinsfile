@@ -49,7 +49,7 @@ pipeline {
 	stage('Deploy') {
 	    steps {
 		sh '''
-		echo 'DOCKER_REPO=${params.DOCKER_REPO}' > sshenv
+		echo "DOCKER_REPO=${params.DOCKER_REPO}" > sshenv
 		echo "DOCKER_IMAGE=${params.DOCKER_IMAGE}" >> sshenv
 		echo "APP_PORT=${params.APP_PORT}" >> sshenv
 		sudo scp sshenv ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/.ssh/environment
