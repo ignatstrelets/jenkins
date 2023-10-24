@@ -49,10 +49,9 @@ pipeline {
 	stage('Deploy') {
 	    steps {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
-		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} APP_PORT=${params.APP_PORT} \
-		DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} 'bash -s' <<EOF
-		chmod +x deploy.sh && sudo bash ./deploy.sh && sudo docker ps
-		EOF """
+		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} "APP_PORT=${params.APP_PORT} \
+		DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} \
+		chmod +x deploy.sh && sudo bash ./deploy.sh && sudo docker ps" """
 	    }
 	}
     }
