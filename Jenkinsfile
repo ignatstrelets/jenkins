@@ -7,46 +7,41 @@ pipeline {
     string(name: "APP_PORT", defaultValue: '8000')
     string(name: "REMOTE_USER", defaultValue: 'ubuntu')
     string(name: "REMOTE_HOST", defaultValue: 'ip-172-31-27-214')
-    string(name: "DOCKER_IMAGE", defaultValue: '')
+    string(name: "DOCKER_REPO", defaultValue: 'ignatstrelets')
+    string(name: "DOCKER_IMAGE", defaultValue: 'hello_hapi')
     }
     
     environment {
         CI = 'true'
     }
-    agent {
-	docker {
-	    label 'docker'
-	    image 'node'
-	    args "-p ${params.APP_PORT}:${params.APP_PORT} -u root "
-	}
+    agent any
     options {
             timeout(time: 20, unit: 'SECONDS')
     }
 
     stages {
         stage('Build') {
-		agent {
-		    label 'docker'
-		}
                 echo 'Building...'
-                sh 'npm install'
-	        echo "Docker container running on ${params.APP_PORT} with CI ${env.CI}"
-            }
+                sh "docker build --build-arg='APP_PORT=${params.APP_PORT}'  -tag ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest ."
+	        echo "Docker image. Port to expose: ${params.APP_PORT} ; CI: ${env.CI}"
+        }
+	stage('Backup') {
+		echo 'Backup. Pushing Docker Image...'
+	withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+        	sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+        	sh "docker push ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
+	}		
         stage('Test') {
-	    agent {
-                    label 'docker'
-	    }
             steps {
 		script {
 		    if (params.TEST) {
-			sh "docker ps -a"
-			sh "APP_PORT=${params.APP_PORT} npm test"
+			sh "docker run -d --name ${params.CONTAINER_NAME} -p ${params.APP_PORT}:${params.APP_PORT} -u root -v"
+			sh "docker exec ${params.CONTAINER_NAME} npm test"
 		    }
 		}
             }
         }
 	stage('Deploy') {
-            agent any
 	    steps {
 		sh "whoami"
 		sh "scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/"
