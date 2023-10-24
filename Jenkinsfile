@@ -55,6 +55,7 @@ pipeline {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'chmod +x deploy.sh'"
 		sh "ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} 'sudo bash -s ./deploy.sh'"
+		sh "docker ps"
 	    }
 	}
     }
