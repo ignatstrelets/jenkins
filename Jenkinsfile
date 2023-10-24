@@ -44,20 +44,23 @@ pipeline {
 			sh "docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest"
 			sh """docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} \
 			${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -u root -v /bin/bash -c 'npm test' &&
-			docker rm ${params.CONTAINER_NAME}"""
+			docker stop ${params.CONTAINER_NAME} && docker rm ${params.CONTAINER_NAME}"""
 		    }
 		}
             }
         }
 	stage('Deploy') {
 	    steps {
+		//sh "sudo groupadd docker"
+		//sh "sudo usermod -aG docker $USER"
+		//sh "newgrp docker"
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \
 		echo 'Starting to deploy docker image..' &&
 		sudo docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
 		sudo docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
 		sudo docker run --name=${params.CONTAINER_NAME} -d -p ${params.APP_PORT}:${params.APP_PORT} ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest -v /bin/bash -c 'npm start'
-		sudo docker ps && sudo docker rm ${params.CONTAINER_NAME}" """
+		sudo docker ps && sudo docker stop && sudo docker rm ${params.CONTAINER_NAME}" """
 	    }
 	}
     }
