@@ -45,7 +45,9 @@ pipeline {
             }
         }
 	stage('Deploy') {
-            agent any
+            agent {
+		    label 'linux'
+	    }
 	    steps {
 		sh "whoami"
 		sh "scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:~/"
