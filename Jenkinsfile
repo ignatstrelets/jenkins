@@ -49,9 +49,13 @@ pipeline {
 	stage('Deploy') {
 	    steps {
 		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
-		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} "APP_PORT=${params.APP_PORT} \
-		DOCKER_REPO=${params.DOCKER_REPO} DOCKER_IMAGE=${params.DOCKER_IMAGE} \
-		chmod +x deploy.sh && sudo bash ./deploy.sh && sudo docker ps" """
+		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \
+		echo "Starting to deploy docker image.." &&
+		CURRENT_IMAGE=${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
+		docker pull $CURRENT_IMAGE &&
+		docker ps -q --filter ancestor=${params.DOCKER_IMAGE} | xargs -r docker stop &&
+		docker run -d -p ${params.APP_PORT}:${params.APP_PORT} $CURRENT_IMAGE -v &&
+		sudo docker ps" """
 	    }
 	}
     }
