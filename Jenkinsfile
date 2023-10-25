@@ -54,7 +54,6 @@ pipeline {
                 branch 'PR-*'  
             }
 	    steps {
-		sh "sudo scp deploy.sh ${params.REMOTE_USER}@${params.REMOTE_HOST}:/home/ubuntu/"
 		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \
 		echo 'Starting to deploy docker image..' &&
 		sudo docker pull ${params.DOCKER_REPO}/${params.DOCKER_IMAGE}:latest &&
