@@ -4,6 +4,8 @@
 
 ##### (Discover branch difference in Jenkinsfile)
 
+###### Application source: https://github.com/do-community/hello_hapi
+
 ###### "Staging" and "Production" projects are identical except project "Production" uses GitHub Integration plugin for conditional action (deploy after approved Pull Request)
 
 
