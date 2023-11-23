@@ -2,6 +2,8 @@
 
 ### Build, test and deploy containerized node.js web app via jenkins:
 
+###### Application source: https://github.com/do-community/hello_hapi
+
 ##### (Discover branch difference in Jenkinsfile)
 
 ##### Configuring GitHub WebHook
