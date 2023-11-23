@@ -51,7 +51,10 @@ pipeline {
         }
 	stage('Deploy') {
 	    when {
-                branch 'PR-*'
+                allOf {
+                    expression { env.GITHUB_PR_STATE == "CLOSE" }
+                    expression { env.GITHUB_PR_TARGET_BRANCH == "master" }
+                  }
             }
 	    steps {
 		sh """ sudo ssh ${params.REMOTE_USER}@${params.REMOTE_HOST} " \

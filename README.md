@@ -1,8 +1,11 @@
 # branch master
 
-### Build, test and deploy containerized node.js web app via jenkins:
+### Build, test and deploy containerized node.js web app via Jenkins:
 
 ##### (Discover branch difference in Jenkinsfile)
+
+###### "Staging" and "Production" projects are identical except project "Production" uses GitHub Integration plugin for conditional action (deploy after approved Pull Request)
+
 
 ##### Configuring GitHub WebHook
 ![Configuring GitHub WebHook](screenshots/Configuring%20GitHub%20WebHook.png)
